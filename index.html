@@ -1,1 +1,1050 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Արենի Ծննդյան Հրավեր</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        @font-face {
+            font-family: 'Vrdznagir';
+            src: url('fonter.am_vrdznagir.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
 
+        :root {
+            --dark-blue: #1e3a8a;
+            --light-blue: #5c7ab5;
+            --soft-divider: rgba(30, 58, 138, 0.4);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+            background-color: transparent; 
+            touch-action: pan-y;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- VIDEO LAYER ONLY --- */
+        .fullscreen-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 100;
+            background-color: transparent;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #introVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background-color: transparent;
+        }
+
+        .tap-trigger {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 110;
+            cursor: pointer;
+        }
+
+        /* --- MAIN CONTENT WRAPPER (SCROLLABLE) --- */
+        #mainContentWrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            pointer-events: none;
+            transform: translateZ(0); 
+        }
+
+        #mainContentWrapper.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* --- FIRST PAGE (HERO) --- */
+        .hero-section {
+            width: 100%;
+            min-height: 100vh;
+            background-image: url('https://cdn.shopify.com/s/files/1/0771/6290/5791/files/download_34.jpg?v=1795625897');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5% 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .text-overlay {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--dark-blue);
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.6); 
+        }
+
+        /* --- CINEMATIC ANIMATIONS --- */
+        
+        /* Slide Down from Top */
+        @keyframes slideDownFade {
+            0% { opacity: 0; transform: translateY(-80px) translateZ(0); }
+            100% { opacity: 1; transform: translateY(0) translateZ(0); }
+        }
+
+        /* Slide from Right */
+        @keyframes slideInFromRightSlow {
+            0% { opacity: 0; transform: translateX(100px) translateZ(0); }
+            100% { opacity: 1; transform: translateX(0) translateZ(0); }
+        }
+
+        /* Slide Up from Bottom */
+        @keyframes slideUpFromBottomBig {
+            0% { opacity: 0; transform: translateY(150px) translateZ(0); }
+            100% { opacity: 1; transform: translateY(0) translateZ(0); }
+        }
+
+        /* Grow */
+        @keyframes growFromSmallSlow {
+            0% { opacity: 0; transform: scale(0.2) translateZ(0); }
+            100% { opacity: 1; transform: scale(1) translateZ(0); }
+        }
+
+        /* Fade Scale */
+        @keyframes fadeInScaleSlow {
+            0% { opacity: 0; transform: scale(0.7) translateZ(0); }
+            100% { opacity: 1; transform: scale(1) translateZ(0); }
+        }
+
+        /* Standard Slide Up for other sections */
+        @keyframes slideUpFadeSlow {
+            0% { opacity: 0; transform: translateY(60px) translateZ(0); }
+            100% { opacity: 1; transform: translateY(0) translateZ(0); }
+        }
+        
+        .anim-item { 
+            opacity: 0; 
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+
+        /* Animation Classes */
+        .slide-down-slow { animation: slideDownFade 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .slide-right-slow { animation: slideInFromRightSlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .slide-up-big-slow { animation: slideUpFromBottomBig 3.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .grow-slow { animation: growFromSmallSlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .fade-scale-slow { animation: fadeInScaleSlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .slide-up-normal { animation: slideUpFadeSlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+        /* Sequential Delays for Hero Section (Starting immediately after video ~7s) */
+        .d-1 { animation-delay: 7.2s; } /* Date Blocks */
+        .d-2 { animation-delay: 7.2s; } /* Date Blocks */
+        .d-3 { animation-delay: 8.5s; } /* Subtitle */
+        .d-4 { animation-delay: 9.5s; } /* Name */
+
+        .main-name {
+            font-family: 'Vrdznagir', serif;
+            font-size: clamp(5rem, 20vw, 11rem);
+            line-height: 1;
+            margin: 10px 0 15px 0;
+            color: var(--dark-blue);
+            font-weight: normal;
+        }
+
+        .sub-text {
+            font-family: 'Vrdznagir', serif;
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            letter-spacing: 1px;
+            margin: 25px 0;
+            color: var(--light-blue);
+            white-space: nowrap;
+        }
+
+        .cap-z {
+            font-size: 1.4em;
+            vertical-align: baseline;
+            margin-right: 2px;
+        }
+
+        .date-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: clamp(10px, 3vw, 20px);
+            margin-top: 80px;
+            margin-bottom: 0;
+        }
+
+        .date-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .date-icon {
+            width: clamp(24px, 5vw, 35px);
+            height: auto;
+            opacity: 0.8;
+            fill: var(--dark-blue);
+        }
+
+        .date-label {
+            font-family: 'Vrdznagir', sans-serif;
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--dark-blue);
+            white-space: nowrap;
+        }
+
+        .date-time {
+            font-family: 'Vrdznagir', sans-serif;
+            font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+            color: var(--dark-blue);
+        }
+
+        .divider-line {
+            width: 1px;
+            height: clamp(40px, 10vw, 60px);
+            background-color: var(--soft-divider);
+            flex-shrink: 0;
+        }
+
+        .big-number {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(4rem, 12vw, 7rem);
+            font-weight: 700;
+            line-height: 1;
+            color: var(--dark-blue);
+            position: relative;
+            top: -10px;
+            flex-shrink: 0;
+        }
+
+        /* --- SCROLL INDICATOR --- */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            opacity: 0.6;
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* --- INVITATION & PHOTO SECTION --- */
+        .invitation-section {
+            width: 100%;
+            background-image: url('https://cdn.shopify.com/s/files/1/0771/6290/5791/files/download_35.jpg?v=1795632136');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .invitation-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.65);
+            z-index: 1;
+        }
+
+        .invitation-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .invitation-text-wrapper {
+            width: 100%;
+            text-align: center;
+            color: var(--dark-blue);
+        }
+
+        .invitation-header {
+            font-family: 'Vrdznagir', serif;
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+            line-height: 1.3;
+            margin: 0 0 10px 0;
+            color: var(--dark-blue);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            opacity: 0;
+            transform: translateX(80px);
+        }
+
+        .invitation-header.visible {
+            animation: slideInFromRightSlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .invitation-line {
+            font-family: 'Vrdznagir', serif;
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            line-height: 1.3;
+            margin: 5px 0;
+            color: var(--dark-blue);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .invitation-line.visible {
+            animation: slideUpFadeSlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .invite-d-1 { animation-delay: 0.3s; }
+        .invite-d-2 { animation-delay: 0.8s; }
+        .invite-d-3 { animation-delay: 1.3s; }
+
+        .child-photo-wrapper {
+            width: 100%;
+            max-width: 280px;
+            opacity: 0;
+            transform: scale(0.3);
+            margin-top: 10px;
+        }
+
+        .child-photo-wrapper.visible {
+            opacity: 1;
+            animation: growFromSmallSlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .child-photo {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(30, 58, 138, 0.2);
+        }
+
+        /* --- COMBINED COUNTDOWN & VENUE SECTION --- */
+        .combined-section {
+            width: 100%;
+            background-image: url('https://cdn.shopify.com/s/files/1/0771/6290/5791/files/download_35.jpg?v=1795632136');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 20px 20px;
+            box-sizing: border-box;
+        }
+
+        .combined-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 1;
+        }
+
+        /* Countdown Styles */
+        .countdown-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+            margin-bottom: 40px;
+        }
+
+        .countdown-content.visible {
+            opacity: 1;
+            animation: fadeInScaleSlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .countdown-title {
+            font-family: 'Vrdznagir', serif;
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: nowrap;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 8px 5px;
+            border-radius: 10px;
+            min-width: 45px;
+        }
+
+        .countdown-number {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-weight: 700;
+            color: var(--dark-blue);
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-family: 'Vrdznagir', sans-serif;
+            font-size: clamp(0.5rem, 1.5vw, 0.7rem);
+            color: var(--light-blue);
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .countdown-separator {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: var(--dark-blue);
+            margin-top: -15px;
+        }
+
+        /* Venue Content */
+        .venue-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .venue-content.visible {
+            opacity: 1;
+            animation: slideUpFadeSlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .venue-title {
+            font-family: 'Vrdznagir', serif;
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            color: var(--dark-blue);
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .restaurant-img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .venue-name-large {
+            font-family: 'Vrdznagir', serif;
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .venue-address-one-line {
+            font-family: 'Vrdznagir', sans-serif;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 500;
+        }
+
+        /* Map Button */
+        .map-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--dark-blue);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-family: 'Vrdznagir', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+            cursor: pointer;
+            border: none;
+            margin-bottom: 40px;
+        }
+
+        .map-button:hover {
+            background-color: var(--light-blue);
+            transform: translateY(-2px);
+        }
+
+        .map-icon {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        /* FINAL DATE - Bigger but one line */
+        .final-date-huge {
+            position: relative;
+            z-index: 2;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 6rem); /* Increased size */
+            font-weight: 700;
+            color: var(--dark-blue);
+            opacity: 0.4;
+            line-height: 1;
+            letter-spacing: 2px;
+            white-space: nowrap; /* Force one line */
+            transform: scaleY(1.3);
+            transform-origin: center;
+            margin-top: 20px;
+            user-select: none;
+        }
+
+        /* --- RSVP SECTION --- */
+        .rsvp-section {
+            width: 100%;
+            background-image: url('https://cdn.shopify.com/s/files/1/0771/6290/5791/files/download_35.jpg?v=1795632136');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+        }
+
+        .rsvp-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            z-index: 1;
+        }
+
+        .rsvp-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .rsvp-container.visible {
+            opacity: 1;
+            animation: slideUpFadeSlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .rsvp-title {
+            font-family: 'Vrdznagir', serif;
+            font-size: clamp(1.2rem, 4vw, 1.6rem);
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+        }
+
+        .rsvp-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .rsvp-input {
+            padding: 10px 15px;
+            border: 1px solid var(--light-blue);
+            border-radius: 8px;
+            font-family: 'Vrdznagir', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .rsvp-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .rsvp-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Vrdznagir', sans-serif;
+            font-size: 0.9rem;
+            color: var(--dark-blue);
+            cursor: pointer;
+        }
+
+        .rsvp-option input {
+            accent-color: var(--dark-blue);
+            width: 16px;
+            height: 16px;
+        }
+
+        .submit-btn {
+            background-color: var(--dark-blue);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Vrdznagir', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--light-blue);
+        }
+
+        /* --- FINAL MESSAGE BLOCK (Simple Rectangle) --- */
+        .final-message-section {
+            width: 100%;
+            background-image: url('https://cdn.shopify.com/s/files/1/0771/6290/5791/files/download_35.jpg?v=1795632136');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            padding: 40px 20px 80px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .final-message-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1;
+        }
+
+        .final-message-box {
+            position: relative;
+            z-index: 2;
+            background: white;
+            padding: 20px 40px; /* More padding */
+            border-radius: 4px;
+            opacity: 0;
+            transform: translateY(20px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .final-message-box.visible {
+            opacity: 1;
+            animation: slideUpFadeSlow 3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .final-message-text {
+            font-family: 'Vrdznagir', serif;
+            font-size: clamp(1.5rem, 5vw, 2.2rem); /* Bigger font */
+            color: var(--dark-blue);
+            white-space: nowrap; /* One line */
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        .fade-out { opacity: 0; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Video Layer -->
+    <div id="videoLayer" class="fullscreen-layer">
+        <video id="introVideo" playsinline muted preload="auto">
+            <source src="https://cdn.shopify.com/videos/c/o/v/c1cb5350a7a24ca89dd35c2a6dae8f53.mp4" type="video/mp4">
+        </video>
+        <div class="tap-trigger" id="tapTrigger"></div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.shopify.com/s/files/1/0771/6290/5791/files/HAPPY_BIRTHDAY_TO_YOU_PIANO_INSTRUMENTAL_BEST_HAPPY_BITHDAY_MUSIC_2021.mp3?v=1795637932" type="audio/mpeg">
+    </audio>
+
+    <!-- Main Content -->
+    <div id="mainContentWrapper">
+        
+        <!-- HERO SECTION (First Page) -->
+        <div class="hero-section">
+            <div class="text-overlay">
+                
+                <!-- Date Section -->
+                <div class="date-container">
+                    <!-- Left Side: Slide from Top -->
+                    <div class="date-col anim-item slide-down-slow d-1">
+                        <svg class="date-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/>
+                        </svg>
+                        <span class="date-label">Երկուշաբթի</span>
+                        <span class="date-time">17:00</span>
+                    </div>
+
+                    <div class="divider-line"></div>
+
+                    <span class="big-number">15</span>
+
+                    <div class="divider-line"></div>
+
+                    <!-- Right Side: Slide from Top -->
+                    <div class="date-col anim-item slide-down-slow d-2">
+                        <svg class="date-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 6a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v2a1 1 0 0 0 1 1zm6 2a1 1 0 0 0 1-1V5a1 1 0 0 0-2 0v2a1 1 0 0 0 1 1zM6 8a1 1 0 0 0 1-1V5a1 1 0 0 0-2 0v2a1 1 0 0 0 1 1zm14 4H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2zm-2 6H6v-2h12v2zm0-4H6v-2h12v2z"/>
+                        </svg>
+                        <span class="date-label">Դեկտեմբեր</span>
+                        <span class="date-time">Մորենա Կիդս</span>
+                    </div>
+                </div>
+
+                <!-- Subtitle: Slide from Right -->
+                <div class="sub-text anim-item slide-right-slow d-3">
+                    <span class="cap-z">Ծ</span>ննդյան հրավեր
+                </div>
+
+                <!-- Name: Slide Up from Bottom -->
+                <h1 class="main-name anim-item slide-up-big-slow d-4">Արեն</h1>
+
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator" onclick="scrollToInvitation()">
+                <svg width="35" height="35" viewBox="0 0 24 24" fill="var(--dark-blue)">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- INVITATION TEXT & PHOTO SECTION -->
+        <div class="invitation-section" id="invitationSection">
+            <div class="invitation-content">
+                <div class="invitation-text-wrapper">
+                    <h2 class="invitation-header invite-d-1" id="inviteHeader">Սիրելի ընկերներ և հարազատներ</h2>
+                    <p class="invitation-line invite-d-2" id="inviteLine1">Սիրով հրավիրում ենք Ձեզ միանալ մեզ</p>
+                    <p class="invitation-line invite-d-3" id="inviteLine2">Արենի ծննդյան տոնակատարությանը</p>
+                </div>
+
+                <div class="child-photo-wrapper" id="childPhoto">
+                    <img src="https://cdn.shopify.com/s/files/1/0771/6290/5791/files/Smiling_Toddler_in_Cozy_Nursery.png?v=1795627156" alt="Արեն" class="child-photo">
+                </div>
+            </div>
+        </div>
+
+        <!-- COMBINED COUNTDOWN & VENUE SECTION -->
+        <div class="combined-section" id="combinedSection">
+            
+            <!-- Countdown -->
+            <div class="countdown-content" id="countdownContent">
+                <h2 class="countdown-title">Տոնական օրվան մնացել է․․․</h2>
+                <div class="countdown-timer">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="days">00</span>
+                        <span class="countdown-label">Օր</span>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="hours">00</span>
+                        <span class="countdown-label">Ժամ</span>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="minutes">00</span>
+                        <span class="countdown-label">Րոպե</span>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="seconds">00</span>
+                        <span class="countdown-label">Վայրկ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Venue Details -->
+            <div class="venue-content" id="venueContent">
+                <h2 class="venue-title">Միջոցառման վայրը</h2>
+                
+                <img src="https://cdn.shopify.com/s/files/1/0771/6290/5791/files/download_37.jpg?v=1795634488" alt="Մորենա Կիդս" class="restaurant-img">
+                    
+                <h3 class="venue-name-large">Մորենա Կիդս</h3>
+                
+                <p class="venue-address-one-line">
+                    Արարատի մարզ, Մասիս, Երևանյան փող. 40
+                </p>
+
+                <a href="https://maps.google.com" target="_blank" class="map-button">
+                    <svg class="map-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    Տեսնել քարտեզում
+                </a>
+
+                <div class="final-date-huge">
+                    15․12․2026
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RSVP SECTION -->
+        <div class="rsvp-section" id="rsvpSection">
+            <div class="rsvp-container" id="rsvpContainer">
+                <h2 class="rsvp-title">Մասնակցության հարցում</h2>
+                
+                <form class="rsvp-form" id="rsvpForm">
+                    <input type="text" id="guestName" class="rsvp-input" placeholder="Ձեր Անունը" required>
+                    
+                    <div class="rsvp-options">
+                        <label class="rsvp-option">
+                            <input type="radio" name="attendance" value="yes" checked>
+                            Ուրախությամբ կգամ
+                        </label>
+                        <label class="rsvp-option">
+                            <input type="radio" name="attendance" value="no">
+                            Ցավոք չեմ կարող գալ
+                        </label>
+                        <label class="rsvp-option">
+                            <input type="radio" name="attendance" value="maybe">
+                            Դեռ չեմ որոշել
+                        </label>
+                    </div>
+
+                    <input type="number" id="guestCount" class="rsvp-input" placeholder="Հյուրերի քանակը (ներառյալ դուք)" min="1" value="1">
+
+                    <button type="submit" class="submit-btn">Պատասխանել</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- FINAL MESSAGE BLOCK -->
+        <div class="final-message-section" id="finalMessageSection">
+            <div class="final-message-box" id="finalMessageBox">
+                <p class="final-message-text">Սիրով կսպասենք Ձեզ</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const video = document.getElementById('introVideo');
+        const audio = document.getElementById('bgMusic');
+        const videoLayer = document.getElementById('videoLayer');
+        const tapTrigger = document.getElementById('tapTrigger');
+        const mainContentWrapper = document.getElementById('mainContentWrapper');
+        let hasStarted = false;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            video.load();
+            video.currentTime = 0.1;
+            video.pause();
+            
+            video.onplay = () => {
+                if (!hasStarted) {
+                    video.pause();
+                    video.currentTime = 0.1;
+                }
+            };
+        });
+
+        function startExperience() {
+            if (hasStarted) return;
+            hasStarted = true;
+            tapTrigger.style.display = 'none';
+
+            // Start Video and Audio
+            video.muted = false;
+            audio.volume = 0.5; 
+            
+            Promise.all([
+                video.play(),
+                audio.play()
+            ]).catch(e => {
+                console.log("Autoplay blocked, using muted fallback");
+                video.muted = true;
+                audio.muted = true;
+                video.play();
+                audio.play();
+            });
+
+            // Wait for video to end (approx 7 seconds) before showing content and starting animations
+            setTimeout(() => {
+                videoLayer.classList.add('fade-out');
+                
+                requestAnimationFrame(() => {
+                    mainContentWrapper.classList.add('visible');
+                    void mainContentWrapper.offsetWidth; // Force reflow to trigger CSS animations immediately
+                });
+                
+                setTimeout(() => {
+                    video.pause();
+                }, 2000); 
+            }, 7000); 
+        }
+
+        tapTrigger.addEventListener('click', startExperience);
+        tapTrigger.addEventListener('touchstart', startExperience, { passive: true });
+
+        // Scroll to invitation section
+        function scrollToInvitation() {
+            const invitationSection = document.getElementById('invitationSection');
+            invitationSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements
+        const inviteHeader = document.getElementById('inviteHeader');
+        const inviteLine1 = document.getElementById('inviteLine1');
+        const inviteLine2 = document.getElementById('inviteLine2');
+        const childPhoto = document.getElementById('childPhoto');
+        const countdownContent = document.getElementById('countdownContent');
+        const venueContent = document.getElementById('venueContent');
+        const rsvpContainer = document.getElementById('rsvpContainer');
+        const finalMessageBox = document.getElementById('finalMessageBox');
+
+        if (inviteHeader) observer.observe(inviteHeader);
+        if (inviteLine1) observer.observe(inviteLine1);
+        if (inviteLine2) observer.observe(inviteLine2);
+        if (childPhoto) {
+            setTimeout(() => observer.observe(childPhoto), 400);
+        }
+        if (countdownContent) observer.observe(countdownContent);
+        if (venueContent) observer.observe(venueContent);
+        if (rsvpContainer) observer.observe(rsvpContainer);
+        if (finalMessageBox) observer.observe(finalMessageBox);
+
+        // RSVP Form Handling
+        document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('guestName').value;
+            const attendance = document.querySelector('input[name="attendance"]:checked').value;
+            const count = document.getElementById('guestCount').value;
+            
+            let statusText = "";
+            if (attendance === 'yes') statusText = "Գալիս է";
+            else if (attendance === 'no') statusText = "Չի գալիս";
+            else statusText = "Դեռ չի որոշել";
+
+            const message = `Նոր պատասխան հրավերին:%0AԱնուն: ${name}%0AՍտատուս: ${statusText}%0AՀյուրեր: ${count}`;
+            
+            window.open(`https://t.me/+37493230141?text=${message}`, '_blank');
+        });
+
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date();
+            let targetYear = now.getFullYear();
+            const targetDate = new Date(targetYear, 11, 15, 17, 0, 0); 
+
+            if (now > targetDate) {
+                targetYear++;
+                targetDate.setFullYear(targetYear);
+            }
+
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('days').innerText = "00";
+                document.getElementById('hours').innerText = "00";
+                document.getElementById('minutes').innerText = "00";
+                document.getElementById('seconds').innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
